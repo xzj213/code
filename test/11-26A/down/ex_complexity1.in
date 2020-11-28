@@ -1,0 +1,10 @@
+S xsc
+	i [n][666][n]
+E
+S orz
+	xsc [2333][n][n]
+	i [n][n][n][23333]
+E
+S chuyu
+	i [888]
+E
