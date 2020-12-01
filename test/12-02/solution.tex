@@ -1,0 +1,162 @@
+\documentclass{ctexbeamer}        % 文档类beamer的汉化版本
+
+\usefonttheme{serif}              % 使用衬线字体
+\usefonttheme{professionalfonts}  % 数学公式字体
+\usepackage{hyperref}
+\usepackage{mathtools}
+\usepackage{color}
+
+%% --> 配置中英文字体
+% \usepackage{fontspec}
+% \setmainfont{Liberation Serif}
+% \setsansfont{DejaVu Sans}
+% \setmonofont{Cousine}
+% \usepackage{xeCJK}
+% \setCJKmainfont[BoldFont=Noto Sans SC]{Noto Serif SC}
+% \setCJKsansfont{Noto Sans SC}
+% \setCJKmonofont{WenQuanYi Micro Hei Mono}
+
+%% --> 主题和色彩风格
+\usetheme{Frankfurt}
+\usecolortheme{orchid}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=black,      
+	urlcolor=cyan,
+	citecolor=black,
+}
+
+\begin{document}
+	
+	%% --> 导言页
+	%
+	\title{NOIP 2020 模拟赛题解}
+	\author{p\_b\_p\_b}
+	\institute{GDFZ}
+	\frame{\titlepage}
+	
+	\begin{frame}{目录}
+		\tableofcontents[hideallsubsections]
+	\end{frame}
+	
+	\section{A 马卡龙}    % 第 1 节
+	
+	%% 每一节开头显示目录，并高亮当前节的主题
+	\AtBeginSection[]{\frame{\tableofcontents[currentsection,hideallsubsections]}}
+	
+	%% --> 第 1 帧
+	\begin{frame}{A 马卡龙}{题目描述}
+		给定 $n\times n$ 的矩阵 $M$，求对于所有 $1\sim n$ 的排列 $p$，$\bigoplus_{i=1}^nM_{i,p_i}$ 的值域。
+		
+		$n\le 60,M_{i,j}\in[0,2^{12})$。
+	\end{frame}
+
+	\begin{frame}{A 马卡龙}{部分分}
+		枚举排列或状压 dp，时间复杂度 $O(n\times n!)$ 或 $O(2^nnV)$。
+		
+		期望得分 $8\sim 23$。
+	\end{frame}
+
+	\begin{frame}{A 马卡龙}{题解}
+		\onslide<1->{将矩阵的每个元素看作集合幂级数，乘法看作异或卷积。}
+		
+		\onslide<2->{所求即为\href{https://zh.wikipedia.org/wiki/\%E7\%A7\%AF\%E5\%92\%8C\%E5\%BC\%8F}{积和式}的每一项是否为 $0$。}
+		
+		\onslide<3->{给每个元素赋一个随机权值，计算行列式的每一项，若为 $0$ 则直接认为积和式的这一项为 $0$。}
+		
+		\onslide<4->{错误概率 $\le \frac np$，其中 $p$ 为你所选取的模数（必须为质数）。}
+		
+		\onslide<5->{总体过程即为将每个元素跑 FWT，每一项分别计算行列式，再 IFWT 回去。}
+		
+		\onslide<6->{时间复杂度 $O(n^3V+V\log V)$。}
+	\end{frame}
+	\section{B 长者}
+	
+	\begin{frame}{B 长者}{题目描述}
+		给定 $n$ 个点 $m$ 条边的图，第 $i$ 个点有实数权值 $c_i$，你需要找出\textbf{一条边或简单环}，使得其中点的权值和大于环大小的一半（下取整）。
+		
+		多组数据，$T\le 30,n\le 500,m\le 2000,c_i\in[0,1]$，$c_i$ 的小数点后位数不超过 $3$。
+	\end{frame}
+
+	\begin{frame}{B 长者}{Subtask 1}
+		\onslide<1->{由于图是树，只能找出一条边，直接遍历所有边即可。}
+		
+		\onslide<2->{时间复杂度 $O(m)$，期望得分 10。}
+	\end{frame}
+
+	\begin{frame}{B 长者}{Subtask 2}
+		\onslide<1->{将所有 $c_i$ 减去 $\frac 12$ 之后，题目所求即为：权值和为正的环、权值和 $>-\frac 12$ 的奇环。}
+		
+		\onslide<2->{若一个环的权值和为正，则必定存在其中一条边的两端点权值和为正。直接遍历所有边即可。}
+		
+		\onslide<3->{然后将每条边的权值设为 $-(c_u+c_v)$，此时边权都非负。题目所求即为权值和 $<1$ 的奇环。}
+		
+		\onslide<4->{将每个点拆成两个点，边 $(u,v)$ 变为 $(u',v)$ 和 $(v',u)$。}
+		
+		\onslide<5->{断掉一条边，枚举端点，跑最短路，枚举另一端点。由于拆了点求奇环，容易证明不会出现不合要求的情况。}
+		
+		\onslide<6->{时间复杂度 $O(nm\log m)$，期望得分 100。}
+	\end{frame}
+
+	\section{C 独白}
+	
+	\begin{frame}{C 独白}{Subtask 1\&2}
+		\onslide<1->{按题意计算式子。}
+		
+		\onslide<2->{时间复杂度 $O(nk+q)$，期望得分 10。}
+		
+		\onslide<3->{可以用线段树或分块等方法优化上述过程。}
+		
+		\onslide<4->{时间复杂度 $O(k\log k+q)$ 到 $O(k\sqrt{k}+q)$ 不等，期望得分 20。}
+	\end{frame}
+	
+	\begin{frame}{C 独白}{正解}
+		\onslide<1->{先证明一个结论：每个数都在 $n-1$ 和 $n+1$ 之间。}
+		
+		\onslide<2->{使用归纳法。对于 $j<i-n-1$，有 $j+a_j\le j+n+1<i$；对于 $j>i-n$，有 $j+a_j\ge j+n-1\ge i$。}
+		
+		\onslide<3->{进一步可以得出：$a_i$ 的取值只和 $a_{i-n},a_{i-n-1}$ 的取值有关。}
+		
+		\onslide<4->{具体地，$a_i=n-1+[a_{i-n}+i-n\ge i]+[a_{i-n-1}+i-n-1\ge i]$。即 $a_i=n-[a_{i-n}=n-1]+[a_{i-n-1}=n+1]$。}
+		
+		\onslide<5->{下文中令 $a_i'=a_i-n$。那么其取值有 $-1,0,1$ 三种，且 $a_i'=[a_{i-n-1}'=1]-[a_{i-n}'=-1]$。}
+	\end{frame}
+	
+	\begin{frame}{C 独白}{正解}
+		\onslide<1->{这个序列有很强的周期性，所以我们将其每 $n$ 个写成一行。}
+		
+		\onslide<2->{发现从一行变成下一行时，每个 $-1$ 会不动，每个 $1$ 会向右移一个（若超出一行则会再到下一行的第一个）。$-1$ 和 $1$ 在同一个格子时会变成 $0$。}
+		
+		\onslide<3->{可以精细模拟上面的过程。也可以注意到，在 $O(1)$ 行后，$1$ 和 $-1$ 会只剩下一种（足够多次就会全部抵消掉）。可以减少一些细节。}
+		
+		\onslide<4->{时间复杂度 $O(n+q)$，期望得分 100。}
+		
+		\onslide<5->{如果用数据结构模拟了足够多行，可以通过子任务 3，期望得分 20。}
+	\end{frame}
+	
+	\section{D 吃瓜}
+	
+	\begin{frame}{D 吃瓜}{题解}
+		\onslide<1->{记“整个序列”表示长度为 $n$ 的那个排列，“吃瓜序列”表示一个人吃了的 $n/3$ 个瓜按顺序组成的序列。}
+		
+		\onslide<2->{求解此题分为两步：先计算所有 Y,Z,K 的合法吃瓜序列，再把 K 没吃的瓜用合法的方案填进去。}
+		
+		\onslide<3->{限制有 6 个，分别是一个人不能吃掉另一个人要吃的瓜，用 $(A,B)$ 表示 A 不能吃 B 要吃的瓜。那么 $(A,B)$ 只与 A 的整个序列和 B 的吃瓜序列有关。}
+		
+		\onslide<4->{做第一步时，会把 $(Y,Z),(Z,Y),(Y,K),(Z,K)$ 的限制全部考虑进去，所以第二步只需要考虑 $(K,Y),(K,Z)$ 。那么可以看出第二步与三个人的吃瓜序列具体是什么是没有关系的，即第一步和第二步是独立的。答案就是两步的答案相乘。}
+	\end{frame}
+
+	\begin{frame}{D 吃瓜}{题解}
+		\onslide<1->{求第二步的答案是个简单 DP。
+	
+		设 $dp_{i,j}$ 表示已考虑 Y,Z 的吃瓜序列的前 $i$ 个，剩下 $j$ 个数可以填，那么答案即为 $\sum_jdp_{n/3,j}\cdot j!$。}
+	
+		\onslide<2->{在第一步，我们先确定 Y,Z 的合法吃瓜序列（考虑了 $(Y,Z),(Z,Y)$），再考虑 K 的吃瓜序列的每个位置可以填入剩下哪些没吃的瓜（考虑 $(Y,K),(Z,K)$）。发现一个瓜能填的位置一定是一个后缀，所以设 $cnt_i$ 表示能填在 $i$ 的瓜的个数，答案就是 $\prod (cnt_i-(n/3-i))$。}
+		
+		\onslide<3->{从前往后推，确定 Y,Z 的吃瓜序列的每个位置填什么，用前缀和优化转移即可。}
+		
+		\onslide<4->{时间复杂度 $O(n^3)$，期望得分 100。}
+	\end{frame}
+	
+\end{document}
